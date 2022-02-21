@@ -3,7 +3,7 @@
  * https://docs.expo.io/guides/color-schemes/
  */
 
-import { Text as DefaultText, View as DefaultView } from 'react-native';
+import { Text as DefaultText,StyleSheet, View as DefaultView, Dimensions} from 'react-native';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
@@ -40,6 +40,48 @@ export function Text(props: TextProps) {
 export function View(props: ViewProps) {
   const { style, lightColor, darkColor, ...otherProps } = props;
   const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
+
+  return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />;
+}
+
+
+export function Grid(props: ViewProps) {
+  const { style, lightColor, darkColor, ...otherProps } = props;
+  const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      padding: 20,
+    },
+  });
+  const DeviceWidth = Dimensions.get('window').width
+
+  return <DefaultView style={{
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }}>
+    <DefaultView style={{
+      flexDirection: 'row',
+      backgroundColor: "grey"}}>
+      <DefaultView>
+        <DefaultView style={{width: DeviceWidth*0.2, height: DeviceWidth*0.2, marginBottom:1, backgroundColor: 'powderblue'}} />
+        <DefaultView style={{width: DeviceWidth*0.2, height: DeviceWidth*0.2, marginBottom:1, backgroundColor: 'skyblue'}} />
+        <DefaultView style={{width: DeviceWidth*0.2, height: DeviceWidth*0.2, backgroundColor: 'yellow'}} />
+      </DefaultView>
+      <DefaultView>
+        <DefaultView style={{width: DeviceWidth*0.2, height: DeviceWidth*0.2, marginBottom:1, marginLeft:1, backgroundColor: 'powderblue'}} />
+        <DefaultView style={{width: DeviceWidth*0.2, height: DeviceWidth*0.2, marginBottom:1, marginLeft:1, backgroundColor: 'skyblue'}} />
+        <DefaultView style={{width: DeviceWidth*0.2, height: DeviceWidth*0.2, marginLeft:1, backgroundColor: 'yellow'}} />
+      </DefaultView>
+      <DefaultView>
+        <DefaultView style={{width: DeviceWidth*0.2, height: DeviceWidth*0.2, marginBottom:1, marginLeft:1, backgroundColor: 'powderblue'}} />
+        <DefaultView style={{width: DeviceWidth*0.2, height: DeviceWidth*0.2, marginBottom:1, marginLeft:1, backgroundColor: 'skyblue'}} />
+        <DefaultView style={{width: DeviceWidth*0.2, height: DeviceWidth*0.2, marginLeft:1, backgroundColor: 'yellow'}} />
+      </DefaultView>    
+    </DefaultView>
+  </DefaultView>
 
   return <DefaultView style={[{ backgroundColor }, style]} {...otherProps} />;
 }
