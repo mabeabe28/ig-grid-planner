@@ -2,8 +2,9 @@ import { StyleSheet, Dimensions, FlatList, Text, View, TouchableHighlight, Image
 //import Palette from 'react-palette'
 import { usePalette } from 'react-palette'
 import * as ImagePicker from "expo-image-picker";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import uuid from 'react-native-uuid';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Grid } from '../components/Themed';
@@ -12,19 +13,49 @@ export default function TabTwoScreen() {
 
  
 
-  const imageDataArray = [];
 
-  const [images, setImages] = useState(imageDataArray); // Setting default value
+
+
+
+  
+  const [images, setImages] = useState([]); // Setting default value
+
+  useEffect(() => {
+
+    // const fetchData = async () => {
+    //   try {
+
+    //     if(images){
+    //       const jsonValue = JSON.stringify(images)
+    //       await AsyncStorage.setItem('@feed_key', jsonValue)
+    //     }
+
+    //     const value = await AsyncStorage.getItem('@feed_key')
+    //     if(value !== null) {
+    //       console.log('value',value);
+    //     }else{
+    //       console.log('none');
+    //     }
+    //   } catch(e) {
+    //     console.log('e',e);
+    //     // error reading value
+    //     console.log('error fetching');
+    //   }
+    // };
+    // fetchData();
+    
+}, [images]);
+
 
   const handleAddImage = (uri: string) => {
+
     setImages((images) => [
       ...images.reverse(),
       {
           id: uuid.v4(), // Random age
-          value: 'G',
           uri:uri
-      },
-  ]);
+      }
+    ]);
   };
 
 
@@ -61,12 +92,14 @@ export default function TabTwoScreen() {
 {/* <View style={styles.itemContainer}>
           <Text style={styles.item}>{item.value}</Text>
         </View> */}
-   console.log('images',images);
-
+        
   return (
     <View>
       <View >
         <Button title="Add Photo" onPress={runImagePickerAsync}></Button>
+      </View>
+      <View >
+        <Button title="Add Row" onPress={handleAddRowPlaceholder}></Button>
       </View>
       <FlatList
       data={images.reverse()}
