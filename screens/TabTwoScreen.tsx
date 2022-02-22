@@ -1,22 +1,42 @@
-import { StyleSheet, Dimensions, FlatList, Text, View, TouchableHighlight, Image} from 'react-native';
+import { StyleSheet, Dimensions, FlatList, Text, View, TouchableHighlight, Image, Button} from 'react-native';
 //import Palette from 'react-palette'
 import { usePalette } from 'react-palette'
+import * as ImagePicker from "expo-image-picker";
+import { useState } from "react";
+import uuid from 'react-native-uuid';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Grid } from '../components/Themed';
 
 export default function TabTwoScreen() {
 
-// const { data, loading, error } = usePalette(IMAGE_URL)
+ 
 
-  const imageData = [
-    {id: 'a', value: 'A', uri:'https://www.youhadme.at/wp-content/uploads/2021/11/photo1636478792-1024x576.jpeg',palette:usePalette('https://www.youhadme.at/wp-content/uploads/2021/11/photo1636478792-1024x576.jpeg')},
-    {id: 'b', value: 'B', uri:'https://www.youhadme.at/wp-content/uploads/2021/11/photo1636478792-1024x576.jpeg',palette:usePalette('https://www.youhadme.at/wp-content/uploads/2021/11/photo1636478792-1024x576.jpeg')},
-    {id: 'c', value: 'C', uri:'https://www.youhadme.at/wp-content/uploads/2021/11/photo1636478792-1024x576.jpeg',palette:usePalette('https://www.youhadme.at/wp-content/uploads/2021/11/photo1636478792-1024x576.jpeg')},
-    {id: 'd', value: 'D', uri:'https://www.youhadme.at/wp-content/uploads/2021/11/photo1636478792-1024x576.jpeg',palette:usePalette('https://www.youhadme.at/wp-content/uploads/2021/11/photo1636478792-1024x576.jpeg')},
-    {id: 'e', value: 'E', uri:'https://www.youhadme.at/wp-content/uploads/2021/11/photo1636478792-1024x576.jpeg',palette:usePalette('https://www.youhadme.at/wp-content/uploads/2021/11/photo1636478792-1024x576.jpeg')},
-    {id: 'f', value: 'F', uri:'https://www.youhadme.at/wp-content/uploads/2021/11/photo1636478792-1024x576.jpeg',palette:usePalette('https://www.youhadme.at/wp-content/uploads/2021/11/photo1636478792-1024x576.jpeg')},
-  ];
+  const imageDataArray = [];
+
+  const [images, setImages] = useState(imageDataArray); // Setting default value
+
+  const handleAddImage = (uri: string) => {
+    setImages((images) => [
+      ...images.reverse(),
+      {
+          id: uuid.v4(), // Random age
+          value: 'G',
+          uri:uri
+      },
+  ]);
+  };
+
+
+  let runImagePickerAsync = async () => {
+    let pickerResult = await ImagePicker.launchImageLibraryAsync();
+    if (pickerResult.cancelled === true) {
+      return;
+    }
+   // props.addImage(pickerResult.uri.toString());
+   //imageData.push({id:'g', value: 'G', uri:pickerResult.uri.toString()})
+   handleAddImage(pickerResult.uri.toString());
+  };
 
 
   const numColumns = 3;
@@ -41,13 +61,19 @@ export default function TabTwoScreen() {
 {/* <View style={styles.itemContainer}>
           <Text style={styles.item}>{item.value}</Text>
         </View> */}
+   console.log('images',images);
+
   return (
-    <FlatList
-      data={imageData.reverse()}
+    <View>
+      <View >
+        <Button title="Add Photo" onPress={runImagePickerAsync}></Button>
+      </View>
+      <FlatList
+      data={images.reverse()}
       renderItem={({item}) => (
         <TouchableHighlight
               //onPress={() => props.removeImage(item.id)}
-              onPress={() => console.log(item.palette)}
+              onPress={() => console.log('lol')}
               style={styles.itemContainer}
             >
               <Image
@@ -58,6 +84,8 @@ export default function TabTwoScreen() {
       )}
       keyExtractor={item => item.id}
       numColumns={numColumns} />
+    </View>
+    
   );
 }
 
